@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OJT Applications & Placement Monitoring</title>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #f4f4f4;
+        padding: 20px;
+    }
+
+    h2 { margin-bottom: 10px; }
+
+    .container {
+        background: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        margin-bottom: 40px;
+    }
+
+    .search-box {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+    }
+
+    input[type="text"], input[type="date"] {
+        padding: 8px;
+        width: 250px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    .btn {
+        padding: 8px 12px;
+        background: #007bff;
+        border: none;
+        color: white;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .btn-approve { background: #28a745; }
+    .btn-reject { background: #dc3545; }
+    .btn-monitor { background: #17a2b8; }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 15px;
+    }
+
+    th, td {
+        padding: 10px;
+        border: 1px solid #ddd;
+    }
+
+    th {
+        background: #007bff;
+        color: white;
+    }
+
+    .status-pending { color: #ff9800; font-weight: bold; }
+    .status-approved { color: #28a745; font-weight: bold; }
+    .status-rejected { color: #dc3545; font-weight: bold; }
+    .status-ongoing { color: #17a2b8; font-weight: bold; }
+
+    /* Modal */
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background: rgba(0,0,0,0.5);
+        justify-content: center;
+        align-items: center;
+    }
+
+    .modal-content {
+        background: white;
+        padding: 20px;
+        width: 350px;
+        border-radius: 10px;
+    }
+
+    .modal input {
+        width: 100%;
+        padding: 7px;
+        margin: 6px 0;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+    button {
+        width: 140px;
+        background: #007bff;
+        color: white;
+        border: none;
+        cursor: pointer;
+        margin-top: 15px;
+        padding: 13px;
+        border-radius: 20px;
+        justify-content: right;
+
+    }
+</style>
+</head>
+<body>
+
+<!-- ================= OJT APPLICATIONS ================= -->
+<div class="container">
+    <h2>OJT Applications (Approve / Reject)</h2>
+
+    <div class="search-box">
+        <input type="text" id="appSearch" placeholder="Search applicant..." onkeyup="searchApplication()">
+        <button class="btn" onclick="openAppModal()">+ New OJT Application</button>
+    </div>
+
+    <table id="applicationTable">
+        <thead>
+            <tr>
+                <th>Application ID</th>
+                <th>Student Name</th>
+                <th>Course</th>
+                <th>Preferred Company</th>
+                <th>Date Applied</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td>APP-001</td>
+                <td>Juan Dela Cruz</td>
+                <td>BSIT</td>
+                <td>Accenture</td>
+                <td>2025-06-10</td>
+                <td class="status-pending">Pending</td>
+                <td>
+                    <button class="btn-approve" onclick="approveApp(this)">Approve</button>
+                    <button class="btn-reject" onclick="rejectApp(this)">Reject</button>
+                </td>
+            </tr>
+
+            <tr>
+                <td>APP-002</td>
+                <td>Maria Santos</td>
+                <td>BSHM</td>
+                <td>Jollibee</td>
+                <td>2025-06-12</td>
+                <td class="status-pending">Pending</td>
+                <td>
+                    <button class="btn-approve" onclick="approveApp(this)">Approve</button>
+                    <button class="btn-reject" onclick="rejectApp(this)">Reject</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- ================= OJT PLACEMENT MONITORING ================= -->
+<div class="container">
+    <h2>OJT Placement Monitoring</h2>
+
+    <div class="search-box">
+        <input type="text" id="placementSearch" placeholder="Search placement..." onkeyup="searchPlacement()">
+        <button class="btn" onclick="openPlacementModal()">+ Add OJT Placement</button>
+    </div>
+
+    <table id="placementTable">
+        <thead>
+            <tr>
+                <th>Placement ID</th>
+                <th>Student Name</th>
+                <th>Company</th>
+                <th>Start Date</th>
+                <th>Hours Completed</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td>PL-001</td>
+                <td>Juan Dela Cruz</td>
+                <td>Accenture</td>
+                <td>2025-06-20</td>
+                <td>120 / 300</td>
+                <td class="status-ongoing">Ongoing</td>
+                <td>
+                    <button class="btn-monitor">Update</button>
+                    <button class="btn-reject" onclick="deleteRow(this)">Remove</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- ========== OJT APPLICATION MODAL ========== -->
+<div class="modal" id="appModal">
+    <div class="modal-content">
+        <h3>New OJT Application</h3>
+
+        <input type="text" id="appid" placeholder="Application ID">
+        <input type="text" id="appname" placeholder="Student Name">
+        <input type="text" id="appcourse" placeholder="Course">
+        <input type="text" id="appcompany" placeholder="Preferred Company">
+        <input type="date" id="appdate">
+
+        <button class="btn" onclick="addApplication()">Submit</button>
+        <button class="btn-reject" onclick="closeAppModal()">Cancel</button>
+    </div>
+</div>
+
+<!-- ========== OJT PLACEMENT MODAL ========== -->
+<div class="modal" id="placementModal">
+    <div class="modal-content">
+        <h3>Add OJT Placement</h3>
+
+        <input type="text" id="pid" placeholder="Placement ID">
+        <input type="text" id="pname" placeholder="Student Name">
+        <input type="text" id="pcomp" placeholder="Company">
+        <input type="date" id="pstart">
+        <input type="text" id="phours" placeholder="Hours Completed (ex: 0 / 300)">
+        <input type="text" id="pstatus" placeholder="Status (Ongoing, Completed)">
+
+        <button class="btn" onclick="addPlacement()">Save</button>
+        <button class="btn-reject" onclick="closePlacementModal()">Cancel</button>
+    </div>
+</div>
+<a href= "index.html"><button>Back to OJT Monitoring System</button></a>
+<script>
+/* ---------------- SEARCH FUNCTIONS ---------------- */
+function searchApplication() {
+    let filter = document.getElementById("appSearch").value.toUpperCase();
+    let rows = document.getElementById("applicationTable").getElementsByTagName("tr");
+
+    for (let i = 1; i < rows.length; i++) {
+        let td = rows[i].getElementsByTagName("td")[1];
+        rows[i].style.display = td && td.textContent.toUpperCase().includes(filter) ? "" : "none";
+    }
+}
+
+function searchPlacement() {
+    let filter = document.getElementById("placementSearch").value.toUpperCase();
+    let rows = document.getElementById("placementTable").getElementsByTagName("tr");
+
+    for (let i = 1; i < rows.length; i++) {
+        let td = rows[i].getElementsByTagName("td")[1];
+        rows[i].style.display = td && td.textContent.toUpperCase().includes(filter) ? "" : "none";
+    }
+}
+
+/* ---------------- APPROVE / REJECT ---------------- */
+function approveApp(btn) {
+    let row = btn.closest("tr");
+    row.cells[5].innerHTML = '<span class="status-approved">Approved</span>';
+}
+
+function rejectApp(btn) {
+    let row = btn.closest("tr");
+    row.cells[5].innerHTML = '<span class="status-rejected">Rejected</span>';
+}
+
+/* ---------------- DELETE ROW ---------------- */
+function deleteRow(btn) {
+    btn.closest("tr").remove();
+}
+
+/* ---------------- MODALS ---------------- */
+function openAppModal() { document.getElementById("appModal").style.display = "flex"; }
+function closeAppModal() { document.getElementById("appModal").style.display = "none"; }
+
+function openPlacementModal() { document.getElementById("placementModal").style.display = "flex"; }
+function closePlacementModal() { document.getElementById("placementModal").style.display = "none"; }
+
+/* ---------------- ADD APPLICATION ---------------- */
+function addApplication() {
+    let id = appid.value;
+    let name = appname.value;
+    let course = appcourse.value;
+    let comp = appcompany.value;
+    let date = appdate.value;
+
+    let table = document.querySelector("#applicationTable tbody");
+    let row = table.insertRow();
+
+    row.innerHTML = `
+        <td>${id}</td>
+        <td>${name}</td>
+        <td>${course}</td>
+        <td>${comp}</td>
+        <td>${date}</td>
+        <td class="status-pending">Pending</td>
+        <td>
+            <button class="btn-approve" onclick="approveApp(this)">Approve</button>
+            <button class="btn-reject" onclick="rejectApp(this)">Reject</button>
+        </td>
+    `;
+
+    closeAppModal();
+}
+
+/* ---------------- ADD PLACEMENT ---------------- */
+function addPlacement() {
+    let pid = document.getElementById("pid").value;
+    let name = document.getElementById("pname").value;
+    let comp = document.getElementById("pcomp").value;
+    let start = document.getElementById("pstart").value;
+    let hours = document.getElementById("phours").value;
+    let status = document.getElementById("pstatus").value;
+
+    let table = document.querySelector("#placementTable tbody");
+    let row = table.insertRow();
+
+    row.innerHTML = `
+        <td>${pid}</td>
+        <td>${name}</td>
+        <td>${comp}</td>
+        <td>${start}</td>
+        <td>${hours}</td>
+        <td class="status-ongoing">${status}</td>
+        <td>
+            <button class="btn-monitor">Update</button>
+            <button class="btn-reject" onclick="deleteRow(this)">Remove</button>
+        </td>
+    `;
+
+    closePlacementModal();
+}
+</script>
+
+</body>
+</html>
