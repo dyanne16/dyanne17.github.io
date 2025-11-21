@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+<head><!
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Task Logs Tracker</title>
@@ -269,6 +269,15 @@ function getWeekStartDate(dateStr) {
   const diff = date.getDate() - day + (day === 0 ? -6 : 1);
   const weekStart = new Date(date.setDate(diff));
   return weekStart.toISOString().split('T')[0];
+}
+</script>
+<button onclick="signOut()">Sign Out</button>
+
+<script>
+function signOut() {
+    localStorage.removeItem("isLoggedIn");
+    alert("You have signed out.");
+    window.location = "login.html";
 }
 </script>
 

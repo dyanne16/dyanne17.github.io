@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Register - OJT Monitoring System</title>
+<style>
+    body { font-family: Arial; background: #f0f2f5; display: flex; justify-content: center; align-items: center; height: 100vh; }
+    .box {
+        width: 350px; background: white; padding: 25px; border-radius: 8px;
+        box-shadow: 0 3px 8px rgba(0,0,0,0.2); text-align: center;
+    }
+    input { width: 100%; padding: 10px; margin: 10px 0; }
+    button { width: 100%; padding: 12px; background: #28a745; border: none; color: white; border-radius: 5px; cursor: pointer; }
+    button:hover { background: #1e7e34; }
+</style>
+</head>
+
+<body>
+
+<div class="box">
+    <h2>Register</h2>
+
+    <input type="text" id="reg_user" placeholder="Username">
+    <input type="password" id="reg_pass" placeholder="Password">
+
+    <button onclick="register()">Register</button>
+
+    <p>Already registered? <a href="login.html">Login</a></p>
+</div>
+
+<script>
+function register() {
+    const username = document.getElementById("reg_user").value;
+    const password = document.getElementById("reg_pass").value;
+
+    if (username.trim() === "" || password.trim() === "") {
+        alert("Please fill all fields");
+        return;
+    }
+
+    const userData = { username, password };
+    localStorage.setItem("ojtUser", JSON.stringify(userData));
+
+    alert("Account created successfully!");
+    window.location = "login.html";
+}
+</script>
+
+</body>
+</html>
