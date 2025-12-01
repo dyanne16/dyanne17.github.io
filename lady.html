@@ -1,0 +1,488 @@
+DOCTYPE html>
+<html lang<!="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Lady Anne Capul Bayto — Portfolio</title>
+
+  <style>
+    :root{
+      --bg: #f3f4f6;
+      --card: #ffffff;
+      --text: #111827;
+      --muted:#6b7280;
+      --accent:#111827;
+      --glass: rgba(255,255,255,0.6);
+      --radius:14px;
+    }
+    :root[data-theme="dark"]{
+      --bg: #0b1220;
+      --card:#0f1724;
+      --text:#e6eef8;
+      --muted:#9aa4b2;
+      --accent:#60a5fa;
+      --glass: rgba(255,255,255,0.03);
+    }
+
+    /* global */
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:Inter, "Segoe UI", Roboto, Arial, sans-serif;
+      background:linear-gradient(180deg,var(--bg), #e9eef7 1200px);
+      color:var(--text);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      min-height:100vh;
+    }
+
+    /* header */
+    .topbar{
+      position:sticky;
+      top:0;
+      z-index:80;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:12px 18px;
+      backdrop-filter: blur(6px);
+      background: linear-gradient(180deg, rgba(0,0,0,0.55), rgba(0,0,0,0.15));
+      background:var(--glass);
+      box-shadow: 0 6px 18px rgba(2,6,23,0.06);
+    }
+    .brand{
+      display:flex;
+      gap:12px;
+      align-items:center;
+    }
+    .brand h1{
+      margin:0;
+      font-size:18px;
+      font-weight:700;
+      letter-spacing:0.2px;
+    }
+    .hamburger{
+      display:inline-grid;
+      place-items:center;
+      width:44px;height:44px;
+      border-radius:10px;
+      cursor:pointer;
+      user-select:none;
+      background:transparent;
+      border:none;
+    }
+    .hamburger svg{width:22px;height:22px}
+    nav.desktop{
+      display:flex;
+      gap:12px;
+      align-items:center;
+    }
+    nav.desktop a{
+      color:var(--text);
+      text-decoration:none;
+      font-weight:600;
+      padding:8px 12px;
+      border-radius:10px;
+    }
+    nav.desktop a:hover{background:rgba(0,0,0,0.06)}
+
+    /* layout */
+    .container{
+      max-width:980px;
+      margin:28px auto;
+      padding:0 18px 60px;
+    }
+
+    section{
+      margin-bottom:34px;
+      opacity:0;
+      transform:translateY(16px);
+      transition:opacity .55s ease, transform .55s ease;
+    }
+    section.visible{opacity:1; transform:none}
+
+    .card{
+      background:var(--card);
+      padding:20px;
+      border-radius:var(--radius);
+      box-shadow: 0 8px 30px rgba(2,6,23,0.06);
+    }
+
+    /* about */
+    .about-head{
+      text-align:center;
+      margin-bottom:18px;
+    }
+    .about-head h2{margin:0;font-size:34px}
+    .about-grid{
+      display:grid;
+      grid-template-columns: 1fr 320px;
+      gap:20px;
+      align-items:start;
+    }
+    .profile-pic{
+      width:100%;
+      max-width:320px;
+      border-radius:12px;
+      display:block;
+      margin:0 auto;
+      object-fit:cover;
+      box-shadow: 0 12px 40px rgba(2,6,23,0.08);
+    }
+    .bio p{line-height:1.6;color:var(--muted)}
+
+    .info-list p{margin:8px 0;font-weight:600}
+    .info-list span{font-weight:400;color:var(--muted); margin-left:6px}
+
+    /* skills */
+    .skills-grid{display:grid;grid-template-columns:1fr 1fr; gap:16px}
+    .skills-grid ul{margin:0;padding-left:18px;color:var(--muted)}
+
+    /* contact */
+    .contact-info p{margin:8px 0;color:var(--muted);font-weight:600}
+
+    /* actions */
+    .actions{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-top:14px;
+    }
+    .btn{
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      padding:10px 14px;
+      border-radius:10px;
+      text-decoration:none;
+      cursor:pointer;
+      font-weight:700;
+      border:none;
+    }
+    .btn.primary{
+      background:var(--accent);
+      color:white;
+    }
+    .btn.ghost{
+      background:transparent;
+      color:var(--text);
+      border:1px solid rgba(0,0,0,0.06);
+    }
+
+    /* back to top */
+    .backtop{
+      position:fixed;
+      right:18px;
+      bottom:18px;
+      z-index:90;
+      display:inline-grid;
+      place-items:center;
+      width:52px;height:52px;border-radius:12px;
+      background:var(--card);
+      box-shadow:0 8px 30px rgba(2,6,23,0.12);
+      cursor:pointer;
+      transition:transform .18s ease;
+    }
+    .backtop:hover{transform:translateY(-4px)}
+
+    /* responsive */
+    @media (max-width:900px){
+      .about-grid{grid-template-columns:1fr; text-align:center}
+      .profile-pic{max-width:240px}
+      nav.desktop{display:none}
+    }
+
+    /* sidebar */
+    .sidebar{
+      position:fixed;
+      right:-320px;
+      top:0;
+      width:320px;
+      height:100vh;
+      padding:22px;
+      background:var(--card);
+      box-shadow: -10px 0 30px rgba(2,6,23,0.15);
+      transition:right .35s cubic-bezier(.2,.9,.3,1);
+      z-index:100;
+      display:flex;
+      flex-direction:column;
+      gap:18px;
+    }
+    .sidebar.open{right:0}
+    .sidebar .close{
+      margin-left:auto;
+      background:transparent;border:none;cursor:pointer;font-size:18px;
+    }
+    .sidebar a{display:block;text-decoration:none;color:var(--text);padding:10px 6px;border-radius:8px}
+    .sidebar a:hover{background:rgba(0,0,0,0.04)}
+
+    /* theme toggle */
+    .toggle{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:6px 10px;
+      border-radius:999px;
+      cursor:pointer;
+      border:1px solid rgba(0,0,0,0.06)
+    }
+    .toggle input{display:none}
+    .switch{
+      width:40px;height:22px;border-radius:999px;background:rgba(0,0,0,0.06);
+      position:relative; display:inline-block;
+    }
+    .knob{
+      position:absolute; top:2px; left:2px; width:18px;height:18px;border-radius:50%;
+      background:white; box-shadow:0 2px 6px rgba(2,6,23,0.12); transition:left .22s ease;
+    }
+    :root[data-theme="dark"] .switch{background:linear-gradient(90deg,#1f2937,#0f1724)}
+    :root[data-theme="dark"] .knob{left:20px}
+
+    /* small niceties */
+    h2.section-title{font-size:28px;margin:0 0 12px;text-align:center}
+    footer{padding:28px 0;text-align:center;color:var(--muted)}
+  </style>
+</head>
+<body>
+
+  <!-- Top bar -->
+  <div class="topbar" id="topbar">
+    <div class="brand">
+      <button class="hamburger" id="openSidebar" aria-label="Open menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+      <div>
+        <h1>Lady Anne Capul Bayto</h1>
+        <div style="font-size:12px;color:var(--muted)">Information Systems</div>
+      </div>
+    </div>
+
+    <nav class="desktop" aria-label="Main navigation">
+      <a href="#about">About</a>
+      <a href="#skills">Skills</a>
+      <a href="#contact">Contact</a>
+      <a class="btn ghost" href="resume.pdf" download>Download Resume</a>
+
+      <label class="toggle" id="themeToggle" title="Toggle dark / light">
+        <div class="switch" aria-hidden><div class="knob"></div></div>
+      </label>
+    </nav>
+  </div>
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar" aria-hidden="true">
+    <div style="display:flex;align-items:center;gap:12px">
+      <img src="profile .png" alt="0dbf0b68-13e3-4af1-be73-59c7f2be525f.jpg" style="width:56px;height:56px;border-radius:10px;object-fit:cover">
+      <div>
+        <div style="font-weight:700">Lady Anne Capul Bayto</div>
+        <div style="font-size:12px;color:var(--muted)">Palikpikan Extension, Balayan, Batangas</div>
+      </div>
+      <button class="close" id="closeSidebar" aria-label="Close menu">✕</button>
+    </div>
+
+    <nav style="display:flex;flex-direction:column;gap:8px;margin-top:8px">
+      <a href="#about" class="side-link">About</a>
+      <a href="#skills" class="side-link">Skills</a>
+      <a href="#contact" class="side-link">Contact</a>
+      <a href="resume.pdf" download class="btn primary" style="justify-content:center">Download Resume</a>
+    </nav>
+
+    <div style="margin-top:auto">
+      <div style="font-size:13px;color:var(--muted);margin-bottom:8px">Theme</div>
+      <label class="toggle" id="themeToggleMobile">
+        <div class="switch" aria-hidden><div class="knob"></div></div>
+      </label>
+    </div>
+  </aside>
+
+  <!-- Main container -->
+  <main class="container">
+
+    <!-- ABOUT -->
+    <section id="about" class="card-section">
+      <div class="about-head">
+        <h2>About Me</h2>
+        <p style="color:var(--muted);margin-top:8px">blend of technical skills and business acumen, showcasing experience with areas like data analysis, software development, system implementation, and technical support.</p>
+      </div>
+
+      <div class="card about-grid card">
+        <div>
+          <div class="bio">
+            <p>Interdisciplinary field that combines biology, computer science, and information technology to collect, store, analyze, and interpret biological data, especially large datasets from sources like DNA and protein sequences.</p>
+          </div>
+
+          <div class="info-list" style="margin-top:12px">
+            <p><strong>Age:</strong><span>25</span></p>
+            <p><strong>Birthdate:</strong><span>March 29, 2000</span></p>
+            <p><strong>Gender:</strong><span>Female</span></p>
+            <p><strong>Nationality:</strong><span>Filipino</span></p>
+          </div>
+
+          <div class="actions" style="margin-top:12px">
+            <a class="btn primary" href="#contact">Contact Me</a>
+            <a class="btn ghost" href="#skills">View Skills</a>
+            <a class="btn ghost" href="resume.pdf" download>Download Resume</a>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;align-items:center;gap:12px">
+          <img class="profile-pic" src="0dbf0b68-13e3-4af1-be73-59c7f2be525f.jpg" alt="Profile picture">
+          <small style="color:var(--muted)"></small>
+        </div>
+      </div>
+    </section>
+
+    <!-- SKILLS -->
+    <section id="skills" class="card-section">
+      <h2 class="section-title">Skills</h2>
+      <div class="skills-grid">
+        <div class="card">
+          <h3 style="margin-top:0">Hard Skills</h3>
+          <ul>
+            <li>Computer techniques</li>
+            <li>Digital literacy</li>
+            <li>Computer data skills</li>
+            <li>Software proficiency</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3 style="margin-top:0">Soft Skills</h3>
+          <ul>
+            <li>Communication</li>
+            <li>Time Management</li>
+            <li>Organization</li>
+            <li>Problem-solving</li>
+            <li>Adaptability</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" class="card-section">
+      <h2 class="section-title">Contact</h2>
+      <div class="card contact-info">
+        <p><strong>Phone:</strong> <span style="font-weight:400;color:var(--muted)">09954457661</span></p>
+        <p><strong>Email:</strong> <span style="font-weight:400;color:var(--muted)">Diannebayto@gmail.com</span></p>
+        <p><strong>Address:</strong> <span style="font-weight:400;color:var(--muted)">Palikpikan Extension, Balayan, Batangas</span></p>
+
+        <div style="margin-top:12px">
+          <a class="btn primary" href="mailto:ilaoandreiisaac4@gmail.com">Send Email</a>
+          <a class="btn ghost" href="tel:09454635800">Call</a>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div style="color:var(--muted)">Made with care • © <span id="year"></span> Lady Anne Capul Bayto</div>
+    </footer>
+
+  </main>
+
+  <button class="backtop" id="backTop" title="Back to top" aria-label="Back to top">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M5 15l7-7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </button>
+
+  <script>
+    // ---------- Elements ----------
+    const sidebar = document.getElementById('sidebar');
+    const openSidebar = document.getElementById('openSidebar');
+    const closeSidebar = document.getElementById('closeSidebar');
+    const sideLinks = document.querySelectorAll('.side-link');
+    const backTop = document.getElementById('backTop');
+    const yearEl = document.getElementById('year');
+
+    // open / close sidebar
+    openSidebar.addEventListener('click', ()=> {
+      sidebar.classList.add('open');
+      sidebar.setAttribute('aria-hidden','false');
+    });
+    closeSidebar.addEventListener('click', ()=> {
+      sidebar.classList.remove('open');
+      sidebar.setAttribute('aria-hidden','true');
+    });
+    // close when clicking a link (mobile)
+    sideLinks.forEach(a => a.addEventListener('click', ()=> {
+      sidebar.classList.remove('open');
+      sidebar.setAttribute('aria-hidden','true');
+    }));
+
+    // back to top
+    backTop.addEventListener('click', ()=> window.scrollTo({top:0, behavior:'smooth'}));
+
+    // set year
+    yearEl.textContent = new Date().getFullYear();
+
+    // theme toggle (desktop + mobile)
+    const root = document.documentElement;
+    const themeToggle = document.getElementById('themeToggle');
+    const themeToggleMobile = document.getElementById('themeToggleMobile');
+
+    function setTheme(t){
+      if(t === 'dark'){
+        root.setAttribute('data-theme','dark');
+      } else {
+        root.removeAttribute('data-theme');
+      }
+      localStorage.setItem('site-theme', t);
+    }
+
+    // initialize from localStorage or prefer-color-scheme
+    (function initTheme(){
+      const saved = localStorage.getItem('site-theme');
+      if(saved) setTheme(saved);
+      else {
+        const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        setTheme(prefersDark ? 'dark' : 'light');
+      }
+    })();
+
+    // click handlers toggle current theme
+    function toggleTheme(){
+      const cur = localStorage.getItem('site-theme') === 'dark' ? 'dark' : 'light';
+      setTheme(cur === 'dark' ? 'light' : 'dark');
+      // animate knob (simple)
+      document.querySelectorAll('.switch').forEach(s => {
+        s.style.transform = 'scale(0.98)';
+        setTimeout(()=> s.style.transform = '', 160);
+      });
+    }
+    themeToggle.addEventListener('click', toggleTheme);
+    themeToggleMobile.addEventListener('click', toggleTheme);
+
+    // reveal on scroll using IntersectionObserver
+    const sections = document.querySelectorAll('section.card-section');
+    const io = new IntersectionObserver((entries)=>{
+      entries.forEach(entry=>{
+        if(entry.isIntersecting){
+          entry.target.classList.add('visible');
+          io.unobserve(entry.target);
+        }
+      });
+    }, {threshold: 0.12});
+    sections.forEach(s => io.observe(s));
+
+    // keyboard: Esc closes sidebar
+    document.addEventListener('keydown', (e)=>{
+      if(e.key === 'Escape') {
+        sidebar.classList.remove('open');
+        sidebar.setAttribute('aria-hidden','true');
+      }
+    });
+
+    // ensure nav links close sidebar and smooth scroll for anchors
+    document.querySelectorAll('a[href^="#"]').forEach(a=>{
+      a.addEventListener('click', (ev)=>{
+        // let browser handle smooth scroll via CSS; just close sidebar if open
+        if(sidebar.classList.contains('open')){
+          sidebar.classList.remove('open');
+          sidebar.setAttribute('aria-hidden','true');
+        }
+      });
+    });
+  </script>
+</body>
+</html>
